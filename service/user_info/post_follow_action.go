@@ -2,6 +2,7 @@ package user_info
 
 import (
 	"fmt"
+	"tiktok/logger"
 	"tiktok/models"
 )
 
@@ -27,10 +28,12 @@ func NewPostFollowActionFlow(userId, userToId int64, actionType int) *PostFollow
 
 func (p *PostFollowActionFlow) Do() error {
 	if err := p.checkNum(); err != nil {
+		logger.ZapLogger.Error("check num failed", logger.Error(err))
 		return err
 	}
 
 	if err := p.publish(); err != nil {
+		logger.ZapLogger.Error("publish failed", logger.Error(err))
 		return err
 	}
 

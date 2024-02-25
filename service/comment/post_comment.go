@@ -2,6 +2,7 @@ package comment
 
 import (
 	"fmt"
+	"tiktok/logger"
 	"tiktok/models"
 )
 
@@ -41,9 +42,11 @@ func NewPostCommentFlow(userId int64, videoId int64, commentId int64, actionType
 
 func (p *PostCommentFlow) Do() (*Response, error) {
 	if err := p.checkNum(); err != nil {
+		logger.ZapLogger.Error("check num failed", logger.Error(err))
 		return nil, err
 	}
 	if err := p.prepareData(); err != nil {
+		logger.ZapLogger.Error("prepare data failed", logger.Error(err))
 		return nil, err
 	}
 	return p.Response, nil

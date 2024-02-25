@@ -1,6 +1,9 @@
 package video
 
-import "tiktok/models"
+import (
+	"tiktok/logger"
+	"tiktok/models"
+)
 
 type PostVideoFlow struct {
 	videoName string
@@ -23,6 +26,7 @@ func (p *PostVideoFlow) Do() error {
 	p.prepareParam()
 
 	if err := p.publish(); err != nil {
+		logger.ZapLogger.Error("PostVideoFlow publish failed", logger.Error(err))
 		return err
 	}
 

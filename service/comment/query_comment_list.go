@@ -2,6 +2,7 @@ package comment
 
 import (
 	"fmt"
+	"tiktok/logger"
 	"tiktok/models"
 )
 
@@ -30,9 +31,11 @@ func NewQueryCommentListFlow(userId, videoId int64) *QueryCommentListFlow {
 
 func (q *QueryCommentListFlow) Do() (*List, error) {
 	if err := q.checkNum(); err != nil {
+		logger.ZapLogger.Error("check num failed", logger.Error(err))
 		return nil, err
 	}
 	if err := q.prepareData(); err != nil {
+		logger.ZapLogger.Error("prepare data failed", logger.Error(err))
 		return nil, err
 	}
 	return q.commentList, nil

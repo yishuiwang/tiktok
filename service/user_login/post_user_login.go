@@ -2,6 +2,7 @@ package user_login
 
 import (
 	"fmt"
+	"tiktok/logger"
 	"tiktok/middleware"
 	"tiktok/models"
 )
@@ -31,10 +32,12 @@ func NewPostUserLoginFlow(username, password string) *PostUserLoginFlow {
 
 func (q *PostUserLoginFlow) Do() (*LoginResponse, error) {
 	if err := q.checkNum(); err != nil {
+		logger.ZapLogger.Error("checkNum failed", logger.Error(err))
 		return nil, err
 	}
 
 	if err := q.updateData(); err != nil {
+		logger.ZapLogger.Error("updateData failed", logger.Error(err))
 		return nil, err
 	}
 

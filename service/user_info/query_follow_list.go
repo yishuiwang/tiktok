@@ -2,6 +2,7 @@ package user_info
 
 import (
 	"fmt"
+	"tiktok/logger"
 	"tiktok/models"
 )
 
@@ -26,10 +27,12 @@ func NewQueryFollowListFlow(userId int64) *QueryFollowListFlow {
 
 func (q *QueryFollowListFlow) Do() (*FollowList, error) {
 	if err := q.checkNum(); err != nil {
+		logger.ZapLogger.Error("check num failed", logger.Error(err))
 		return nil, err
 	}
 
 	if err := q.prepareData(); err != nil {
+		logger.ZapLogger.Error("prepare data failed", logger.Error(err))
 		return nil, err
 	}
 

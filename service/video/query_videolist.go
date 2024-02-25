@@ -2,6 +2,7 @@ package video
 
 import (
 	"fmt"
+	"tiktok/logger"
 	"tiktok/models"
 )
 
@@ -26,9 +27,11 @@ func NewQueryVideoListByUserIdFlow(userId int64) *QueryVideoListByUserIdFlow {
 
 func (q *QueryVideoListByUserIdFlow) Do() (*List, error) {
 	if err := q.checkNum(); err != nil {
+		logger.ZapLogger.Error("check num failed", logger.Error(err))
 		return nil, err
 	}
-	if err := q.packData(); err != nil {
+	if err := q.prepareData(); err != nil {
+		logger.ZapLogger.Error("pack data failed", logger.Error(err))
 		return nil, err
 	}
 	return q.videoList, nil
@@ -41,7 +44,7 @@ func (q *QueryVideoListByUserIdFlow) checkNum() error {
 	return nil
 }
 
-func (q *QueryVideoListByUserIdFlow) packData() error {
+func (q *QueryVideoListByUserIdFlow) prepareData() error {
 	var videos []*models.Video
 	err := models.NewVideoDAO().QueryVideoListByUserId(q.userId, &videos)
 	if err != nil {

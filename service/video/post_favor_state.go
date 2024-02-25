@@ -2,6 +2,7 @@ package video
 
 import (
 	"fmt"
+	"tiktok/logger"
 	"tiktok/models"
 )
 
@@ -26,6 +27,7 @@ func NewPostFavorStateFlow(userId, videoId, actionType int64) *PostFavorStateFlo
 
 func (p *PostFavorStateFlow) Do() error {
 	if err := p.checkNum(); err != nil {
+		logger.ZapLogger.Error("PostFavorStateFlow checkNum failed", logger.Error(err))
 		return err
 	}
 

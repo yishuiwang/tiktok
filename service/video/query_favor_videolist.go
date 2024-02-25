@@ -2,6 +2,7 @@ package video
 
 import (
 	"fmt"
+	"tiktok/logger"
 	"tiktok/models"
 )
 
@@ -26,9 +27,11 @@ func NewQueryFavorVideoListFlow(userId int64) *QueryFavorVideoListFlow {
 
 func (q *QueryFavorVideoListFlow) Do() (*FavorList, error) {
 	if err := q.checkNum(); err != nil {
+		logger.ZapLogger.Error("QueryFavorVideoListFlow checkNum failed", logger.Error(err))
 		return nil, err
 	}
 	if err := q.prepareData(); err != nil {
+		logger.ZapLogger.Error("QueryFavorVideoListFlow prepareData failed", logger.Error(err))
 		return nil, err
 	}
 	return q.videoList, nil

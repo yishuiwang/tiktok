@@ -1,6 +1,7 @@
 package video
 
 import (
+	"tiktok/logger"
 	"tiktok/models"
 	"time"
 )
@@ -31,6 +32,7 @@ func NewQueryFeedVideoListFlow(userId int64, latestTime time.Time) *QueryFeedVid
 
 func (q *QueryFeedVideoListFlow) Do() (*FeedVideoList, error) {
 	if err := q.prepareData(); err != nil {
+		logger.ZapLogger.Error("QueryFeedVideoListFlow prepareData failed", logger.Error(err))
 		return nil, err
 	}
 
