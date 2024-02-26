@@ -2,6 +2,7 @@ package video
 
 import (
 	"fmt"
+	"tiktok/cache"
 	"tiktok/logger"
 	"tiktok/models"
 )
@@ -49,7 +50,7 @@ func (p *PostFavorStateFlow) PlusOperation() error {
 		return fmt.Errorf("plus one favor failed")
 	}
 	//对应的用户是否点赞的映射状态更新
-	//cache.NewProxyIndexMap().UpdateVideoFavorState(p.userId, p.videoId, true)
+	cache.NewProxyIndexMap().UpdateVideoFavorState(p.userId, p.videoId, true)
 	return nil
 }
 
@@ -61,7 +62,7 @@ func (p *PostFavorStateFlow) MinusOperation() error {
 		return fmt.Errorf("minus one favor failed")
 	}
 	//对应的用户是否点赞的映射状态更新
-	//cache.NewProxyIndexMap().UpdateVideoFavorState(p.userId, p.videoId, false)
+	cache.NewProxyIndexMap().UpdateVideoFavorState(p.userId, p.videoId, false)
 	return nil
 }
 

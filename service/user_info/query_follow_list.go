@@ -2,6 +2,7 @@ package user_info
 
 import (
 	"fmt"
+	"tiktok/cache"
 	"tiktok/logger"
 	"tiktok/models"
 )
@@ -54,6 +55,9 @@ func (q *QueryFollowListFlow) prepareData() error {
 	err := models.NewUserInfoDAO().GetFollowListByUserId(q.userId, &userList)
 	if err != nil {
 		return err
+	}
+	for _, v := range q.userList {
+		v.IsFollow = cache.NewProxyIndexMap().GetUserRelation(q.userId, v.Id)
 	}
 	q.userList = userList
 	return nil

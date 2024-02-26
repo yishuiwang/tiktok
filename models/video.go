@@ -96,9 +96,10 @@ func (v *VideoDAO) MinusOneFavorByUserIdAndVideoId(userId int64, videoId int64) 
 // QueryFavorVideoListByUserId 查询用户点赞的视频列表
 func (v *VideoDAO) QueryFavorVideoListByUserId(userId int64, videoList *[]*Video) error {
 	//多表查询，左连接得到结果，再映射到数据
-	if err := DB.Raw("SELECT v.* FROM user_favor_videos u , videos v WHERE u.user_info_id = ? AND u.video_id = v.id", userId).Scan(videoList).Error; err != nil {
+	if err := DB.Model(&UserInfo{}).Where("id = ?", userId).Preload("Users").Find(&UserInfo{}).Error; err != nil {
 		return err
 	}
+
 	//如果id为0，则说明没有查到数据
 	if len(*videoList) == 0 || (*videoList)[0].Id == 0 {
 		return fmt.Errorf("点赞列表为空")

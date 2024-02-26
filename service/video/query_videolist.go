@@ -2,6 +2,7 @@ package video
 
 import (
 	"fmt"
+	"tiktok/cache"
 	"tiktok/logger"
 	"tiktok/models"
 )
@@ -49,6 +50,16 @@ func (q *QueryVideoListByUserIdFlow) prepareData() error {
 	err := models.NewVideoDAO().QueryVideoListByUserId(q.userId, &videos)
 	if err != nil {
 		return err
+	}
+	// 作者信息查询
+	var userInfo models.UserInfo
+	if err = models.NewUserInfoDAO().QueryUserInfoById(q.userId, &userInfo); err != nil {
+		return err
+	}
+	// 是否点赞状态查询
+	for _, video := range videos {
+		video.Author = userInfo
+		video.IsFavorite = cache.NewProxyIndexMap().GetVideoFavorState(q.userId, video.Id)
 	}
 	q.videoList = &List{
 		Videos: videos,

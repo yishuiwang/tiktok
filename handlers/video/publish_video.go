@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"os/exec"
 	"path/filepath"
 	"tiktok/config"
 	"tiktok/models"
 	"tiktok/service/video"
+	"tiktok/utils"
 	"time"
 )
 
@@ -57,13 +57,8 @@ func PublishVideoHandler(c *gin.Context) {
 			continue
 		}
 
-		coverPath := filepath.Join(config.GetConfig("video.save_path"), "cover_"+name+".jpg")
-		cmd := exec.Command("ffmpeg", "-i", savePath, "-ss", "00:00:01", "-vframes", "1", coverPath)
-		err = cmd.Run()
-		if err != nil {
-			PublishVideoError(c, err.Error())
-			continue
-		}
+		utils.GetCover(savePath, filepath.Join(config.GetConfig("video.save_path"), "cover_"+name+".jpg"), "00:00:01")
+
 		err = video.PostVideo(userId, filename, "cover_"+name, title)
 		if err != nil {
 			PublishVideoError(c, err.Error())

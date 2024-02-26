@@ -2,6 +2,7 @@ package user_info
 
 import (
 	"fmt"
+	"tiktok/cache"
 	"tiktok/logger"
 	"tiktok/models"
 )
@@ -67,10 +68,10 @@ func (p *PostFollowActionFlow) publish() error {
 	case FOLLOW:
 		err = userDAO.AddUserFollow(p.userId, p.userToId)
 		//更新redis的关注信息
-		//cache.NewProxyIndexMap().UpdateUserRelation(p.userId, p.userToId, true)
+		cache.NewProxyIndexMap().UpdateUserRelation(p.userId, p.userToId, true)
 	case CANCEL:
 		err = userDAO.CancelUserFollow(p.userId, p.userToId)
-		//cache.NewProxyIndexMap().UpdateUserRelation(p.userId, p.userToId, false)
+		cache.NewProxyIndexMap().UpdateUserRelation(p.userId, p.userToId, false)
 	default:
 		return fmt.Errorf("action type is not valid")
 	}
